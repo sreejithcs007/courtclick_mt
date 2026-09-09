@@ -1,3 +1,4 @@
+import 'package:courtclick_mt/modules/authorised/home/view/home_screen.dart';
 import 'package:courtclick_mt/widget/custom_profile_card/custom_profile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,12 @@ class LoginPageScreen extends StatelessWidget {
               return ProfileCard(
                 name: name,
                 onTap: () {
-                  debugPrint('$name selected');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(profileName: name),
+                    ),
+                  );
                 },
               );
             }).toList(),
