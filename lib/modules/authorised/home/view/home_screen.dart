@@ -4,6 +4,7 @@ import 'package:courtclick_mt/modules/authorised/downloads/view/downloads_screen
 import 'package:courtclick_mt/modules/authorised/home/bloc/home_bloc.dart';
 import 'package:courtclick_mt/modules/authorised/home/bloc/home_event.dart';
 import 'package:courtclick_mt/modules/authorised/home/bloc/home_state.dart';
+import 'package:courtclick_mt/modules/authorised/search/view/search_screen.dart';
 import 'package:courtclick_mt/shared/models/authorised/movie_model/movie_model.dart';
 import 'package:courtclick_mt/modules/authorised/more/view/more_screen.dart';
 import 'package:courtclick_mt/modules/authorised/movie_detail/view/movie_detail_screen.dart';
@@ -32,12 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return _buildHomeContentWithBloc();
       case 1:
-        return const Center(
-          child: Text(
-            'Search Screen',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        );
+        return const SearchScreen();
       case 2:
         return const ComingSoonScreen();
       case 3:

@@ -1,13 +1,13 @@
 import 'package:courtclick_mt/modules/authorised/coming_soon/bloc/coming_soon_event.dart';
 import 'package:courtclick_mt/modules/authorised/coming_soon/bloc/coming_soon_state.dart';
-import 'package:courtclick_mt/modules/authorised/coming_soon/repository/coming_soon_repository.dart';
+import 'package:courtclick_mt/shared/repository/upcoming_movie_repo/upcoming_movie_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ComingSoonBloc extends Bloc<ComingSoonEvent, ComingSoonState> {
-  final ComingSoonRepository _repository;
+  final UpComingSoonRepository _repository;
 
-  ComingSoonBloc({ComingSoonRepository? repository})
-    : _repository = repository ?? ComingSoonRepository(),
+  ComingSoonBloc({UpComingSoonRepository? repository})
+    : _repository = repository ?? UpComingSoonRepository(),
       super(const ComingSoonInitialState()) {
     on<FetchUpcomingMoviesEvent>(_onFetchUpcomingMovies);
     on<RefreshUpcomingMoviesEvent>(_onFetchUpcomingMovies);
