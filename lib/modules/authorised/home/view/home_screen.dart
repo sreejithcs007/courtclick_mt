@@ -1,4 +1,5 @@
 import 'package:courtclick_mt/core/navigation/custom_page_route.dart';
+import 'package:courtclick_mt/modules/authorised/coming_soon/view/coming_soon_screen.dart';
 import 'package:courtclick_mt/modules/authorised/downloads/view/downloads_screen.dart';
 import 'package:courtclick_mt/modules/authorised/home/bloc/home_bloc.dart';
 import 'package:courtclick_mt/modules/authorised/home/bloc/home_event.dart';
@@ -38,12 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       case 2:
-        return const Center(
-          child: Text(
-            'Coming Soon Screen',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        );
+        return const ComingSoonScreen();
       case 3:
         return const DownloadsScreen();
       case 4:
