@@ -5,7 +5,7 @@ abstract class SearchEvent {
 class FetchSearchMoviesEvent extends SearchEvent {
   final String query;
 
-  const FetchSearchMoviesEvent({this.query = 's'});
+  const FetchSearchMoviesEvent({this.query = ''});
 }
 
 class ClearSearchEvent extends SearchEvent {

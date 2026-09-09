@@ -4,6 +4,7 @@ import 'package:courtclick_mt/modules/authorised/coming_soon/bloc/coming_soon_bl
 import 'package:courtclick_mt/modules/authorised/coming_soon/bloc/coming_soon_event.dart';
 import 'package:courtclick_mt/modules/authorised/coming_soon/bloc/coming_soon_state.dart';
 import 'package:courtclick_mt/modules/authorised/movie_detail/view/movie_detail_screen.dart';
+import 'package:courtclick_mt/widget/custom_state_view/custom_state_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -27,38 +28,26 @@ class ComingSoonScreen extends StatelessWidget {
               }
 
               if (state is ComingSoonErrorState) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Error: ${state.errorMessage}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<ComingSoonBloc>().add(
-                            const FetchUpcomingMoviesEvent(),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        child: const Text(
-                          'Retry',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
+                return CustomErrorView(
+                  message: state.errorMessage,
+                  onRetry: () {
+                    context.read<ComingSoonBloc>().add(
+                          const FetchUpcomingMoviesEvent(),
+                        );
+                  },
                 );
               }
 
               if (state is ComingSoonLoadedState) {
                 final movies = state.upcomingMovieModel.results;
                 final remindedIds = state.remindedMovieIds;
+
+                if (movies.isEmpty) {
+                  return const CustomEmptyView(
+                    title: 'No Upcoming Movies',
+                    subtitle: 'There are no upcoming movies scheduled at this time. Please check back later.',
+                  );
+                }
 
                 return RefreshIndicator(
                   color: Colors.red,

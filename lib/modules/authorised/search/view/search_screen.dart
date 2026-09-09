@@ -6,6 +6,7 @@ import 'package:courtclick_mt/modules/authorised/search/bloc/search_event.dart';
 import 'package:courtclick_mt/modules/authorised/search/bloc/search_state.dart';
 import 'package:courtclick_mt/shared/models/authorised/search_movie/search_movie_model.dart';
 import 'package:courtclick_mt/widget/search_text_field/search_text_field.dart';
+import 'package:courtclick_mt/widget/custom_state_view/custom_state_view.dart';
 import 'package:courtclick_mt/widget/shimmer_loading/search_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,35 +134,16 @@ class _SearchScreenViewState extends State<_SearchScreenView> {
                   }
 
                   if (state is SearchErrorState) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Error: ${state.errorMessage}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                            ),
-                            onPressed: () {
-                              final text = _searchController.text.trim();
-                              context.read<SearchBloc>().add(
-                                FetchSearchMoviesEvent(
-                                  query: text.isEmpty ? 's' : text,
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              'Retry',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
+                    return CustomErrorView(
+                      message: state.errorMessage,
+                      onRetry: () {
+                        final text = _searchController.text.trim();
+                        context.read<SearchBloc>().add(
+                              FetchSearchMoviesEvent(
+                                query: text.isEmpty ? 's' : text,
+                              ),
+                            );
+                      },
                     );
                   }
 
@@ -184,14 +166,10 @@ class _SearchScreenViewState extends State<_SearchScreenView> {
                     }
 
                     if (results.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'No results found for "${state.query}"',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        ),
+                      return CustomEmptyView(
+                        title: 'No Results Found',
+                        subtitle: 'We couldn\'t find any matches for "${state.query}". Try searching for something else.',
+                        icon: Icons.search_off_rounded,
                       );
                     }
 

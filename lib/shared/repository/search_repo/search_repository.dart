@@ -5,10 +5,10 @@ class SearchRepository {
   final DioService _dioService;
 
   SearchRepository({DioService? dioService})
-      : _dioService = dioService ?? DioService();
+    : _dioService = dioService ?? DioService();
 
-  Future<SearchMovieModel> fetchSearchMovies({String query = 's'}) async {
-    final searchParam = query.trim().isEmpty ? 's' : query.trim();
+  Future<SearchMovieModel> fetchSearchMovies({String query = ''}) async {
+    final searchParam = query.trim().isEmpty ? '' : query.trim();
     final encodedQuery = Uri.encodeComponent(searchParam);
     final response = await _dioService.getData(
       endpoints: 'search/multi?query=$encodedQuery',

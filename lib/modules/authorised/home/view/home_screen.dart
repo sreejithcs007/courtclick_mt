@@ -8,6 +8,7 @@ import 'package:courtclick_mt/modules/authorised/search/view/search_screen.dart'
 import 'package:courtclick_mt/shared/models/authorised/movie_model/movie_model.dart';
 import 'package:courtclick_mt/modules/authorised/more/view/more_screen.dart';
 import 'package:courtclick_mt/modules/authorised/movie_detail/view/movie_detail_screen.dart';
+import 'package:courtclick_mt/widget/custom_state_view/custom_state_view.dart';
 import 'package:courtclick_mt/widget/featured_banner/featured_banner.dart';
 import 'package:courtclick_mt/widget/movie_section/movie_section.dart';
 import 'package:courtclick_mt/widget/netflix_bottom_nav/netflix_bottom_nav.dart';
@@ -55,30 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (state is HomeErrorState) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Error: ${state.errorMessage}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<HomeBloc>().add(const FetchHomeDataEvent());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: const Text(
-                      'Retry',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
+            return CustomErrorView(
+              message: state.errorMessage,
+              onRetry: () {
+                context.read<HomeBloc>().add(const FetchHomeDataEvent());
+              },
             );
           }
 
@@ -86,6 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
             final topRated = state.topRatedModel.results;
             final nowPlaying = state.nowPlayingModel.results;
             final popular = state.popularMoviesModel.results;
+
+            if (topRated.isEmpty && nowPlaying.isEmpty && popular.isEmpty) {
+              return const CustomEmptyView(
+                title: 'No Movies Available',
+                subtitle: 'Unable to fetch movies right now. Please pull down to refresh.',
+              );
+            }
 
             final featuredMovie = topRated.isNotEmpty
                 ? MovieModel(
