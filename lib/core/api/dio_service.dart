@@ -6,20 +6,31 @@ class DioService {
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: EnvConfig().baseUrl,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${EnvConfig().apiToken}',
+        'accept': 'application/json',
+      },
     ),
   );
+
+  String _formatEndpoint(String endpoint) {
+    if (endpoint.startsWith('/')) {
+      return endpoint;
+    }
+    return '/$endpoint';
+  }
 
   // GET
   Future<dynamic> getData({required String endpoints}) async {
     try {
-      final response = await dio.get('/$endpoints');
+      final response = await dio.get(_formatEndpoint(endpoints));
 
       if (response.statusCode == 200) {
         return response.data;
       } else {
         throw Exception(
-          'Failed to load products. Status Code: ${response.statusCode}',
+          'Failed to load data. Status Code: ${response.statusCode}',
         );
       }
     } on DioException catch (e) {
@@ -33,9 +44,7 @@ class DioService {
     required Map<String, dynamic> body,
   }) async {
     try {
-      final response = await dio.post('/$endpoints', data: body);
-
-      print('================ network ${response.statusCode}');
+      final response = await dio.post(_formatEndpoint(endpoints), data: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ApiResponse(body: response.data, error: false, errorMsg: '');
@@ -62,7 +71,7 @@ class DioService {
     required int id,
   }) async {
     try {
-      final response = await dio.put('/$endpoints/$id', data: body);
+      final response = await dio.put('${_formatEndpoint(endpoints)}/$id', data: body);
 
       if (response.statusCode == 200) {
         return Map<String, dynamic>.from(response.data);
@@ -77,11 +86,11 @@ class DioService {
   // DELETE
   Future<void> deleteData({required int id, required String endpoints}) async {
     try {
-      final response = await dio.delete('/$endpoints/$id');
+      final response = await dio.delete('${_formatEndpoint(endpoints)}/$id');
 
       if (response.statusCode != 200) {
         throw Exception(
-          'Failed to delete product. Status Code: ${response.statusCode}',
+          'Failed to delete. Status Code: ${response.statusCode}',
         );
       }
     } on DioException catch (e) {

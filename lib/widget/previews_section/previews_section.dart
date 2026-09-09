@@ -1,15 +1,12 @@
-import 'package:courtclick_mt/modules/authorised/home/models/movie_model.dart';
+import 'package:courtclick_mt/env.dart';
+import 'package:courtclick_mt/shared/models/authorised/movie_model/movie_model.dart';
 import 'package:flutter/material.dart';
 
 class PreviewsSection extends StatelessWidget {
   final List<MovieModel> previews;
   final ValueChanged<MovieModel>? onPreviewTap;
 
-  const PreviewsSection({
-    super.key,
-    required this.previews,
-    this.onPreviewTap,
-  });
+  const PreviewsSection({super.key, required this.previews, this.onPreviewTap});
 
   static const List<Color> _borderColors = [
     Colors.amber,
@@ -19,8 +16,17 @@ class PreviewsSection extends StatelessWidget {
     Colors.greenAccent,
   ];
 
+  String _getImageUrl(String url) {
+    if (url.startsWith('/')) {
+      return '${EnvConfig().imageBaseUrl}$url';
+    }
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (previews.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,6 +50,7 @@ class PreviewsSection extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = previews[index];
               final borderColor = _borderColors[index % _borderColors.length];
+              final fullImageUrl = _getImageUrl(item.imageUrl);
 
               return GestureDetector(
                 onTap: () => onPreviewTap?.call(item),
@@ -59,7 +66,7 @@ class PreviewsSection extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(color: borderColor, width: 2.5),
                           image: DecorationImage(
-                            image: NetworkImage(item.imageUrl),
+                            image: NetworkImage(fullImageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),

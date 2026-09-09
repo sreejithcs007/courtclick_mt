@@ -1,4 +1,5 @@
 import 'package:courtclick_mt/core/constanst/assets_constants/assets_contant.dart';
+import 'package:courtclick_mt/core/navigation/custom_page_route.dart';
 import 'package:courtclick_mt/modules/unauthorised/login_screen/view/view.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginPageScreen()),
+      SmoothPageRoute(page: const LoginPageScreen()),
     );
   }
 

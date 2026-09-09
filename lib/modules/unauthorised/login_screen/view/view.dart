@@ -1,3 +1,4 @@
+import 'package:courtclick_mt/core/navigation/custom_page_route.dart';
 import 'package:courtclick_mt/modules/authorised/home/view/home_screen.dart';
 import 'package:courtclick_mt/widget/custom_profile_card/custom_profile_card.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class LoginPageScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(profileName: name),
+                    SmoothPageRoute(
+                      page: HomeScreen(profileName: name),
                     ),
                   );
                 },

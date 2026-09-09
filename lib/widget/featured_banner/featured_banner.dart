@@ -1,5 +1,6 @@
 import 'package:courtclick_mt/core/constanst/assets_constants/assets_contant.dart';
-import 'package:courtclick_mt/modules/authorised/home/models/movie_model.dart';
+import 'package:courtclick_mt/env.dart';
+import 'package:courtclick_mt/shared/models/authorised/movie_model/movie_model.dart';
 import 'package:flutter/material.dart';
 
 class FeaturedBanner extends StatelessWidget {
@@ -16,9 +17,17 @@ class FeaturedBanner extends StatelessWidget {
     this.onInfoTap,
   });
 
+  String _getImageUrl(String url) {
+    if (url.startsWith('/')) {
+      return '${EnvConfig().imageBaseUrl}$url';
+    }
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final fullImageUrl = _getImageUrl(movie.imageUrl);
 
     return Stack(
       children: [
@@ -27,8 +36,9 @@ class FeaturedBanner extends StatelessWidget {
           height: screenHeight * 0.55,
           width: double.infinity,
           decoration: BoxDecoration(
+            color: Colors.grey[900],
             image: DecorationImage(
-              image: NetworkImage(movie.imageUrl),
+              image: NetworkImage(fullImageUrl),
               fit: BoxFit.cover,
             ),
           ),
@@ -80,21 +90,33 @@ class FeaturedBanner extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     'TV Shows',
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 TextButton(
                   onPressed: () {},
                   child: const Text(
                     'Movies',
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 TextButton(
                   onPressed: () {},
                   child: const Text(
                     'My List',
-                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -110,6 +132,20 @@ class FeaturedBanner extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (movie.title.isNotEmpty) ...[
+                Text(
+                  movie.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(blurRadius: 8, color: Colors.black)],
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+
               // Badge tag (e.g. #2 in Nigeria Today)
               if (movie.badgeText != null) ...[
                 Row(
@@ -172,12 +208,19 @@ class FeaturedBanner extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    icon: const Icon(Icons.play_arrow, color: Colors.black, size: 28),
+                    icon: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.black,
+                      size: 28,
+                    ),
                     label: const Text(
                       'Play',
                       style: TextStyle(
